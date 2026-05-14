@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Lock } from 'lucide-react';
+import bannerImageImport from '../imports/JandelBanner.jpeg';
 
 // Replace with your Google Apps Script deployment URL
 const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxypCDPmtHqxyD8jRkIEf9341DSWvcNI30aMmjxusP2E-igP9LYZ3E6-91UOXZ0Hi-j/exec';
@@ -15,7 +16,7 @@ export default function App() {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const bannerImage = '/imports/JandelBanner.jpeg';
+  const bannerImage = bannerImageImport;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
