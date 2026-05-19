@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Lock } from 'lucide-react';
 import bannerImageImport from '../imports/JandelBanner.jpeg';
 
@@ -16,7 +16,36 @@ export default function App() {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [countdown, setCountdown] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
   const bannerImage = bannerImageImport;
+
+  useEffect(() => {
+    const calculateCountdown = () => {
+      const eventDate = new Date('2026-06-05T00:00:00').getTime();
+      const now = new Date().getTime();
+      const difference = eventDate - now;
+
+      if (difference > 0) {
+        setCountdown({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60)
+        });
+      } else {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      }
+    };
+
+    calculateCountdown();
+    const interval = setInterval(calculateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +90,7 @@ export default function App() {
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-purple-700 rounded-full"></div>
-            <span className="text-sm">RESPONSE IN 42 days</span>
+            <span className="text-sm">RESPONSE IN {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s</span>
           </div>
           <div className="px-4 py-1 border border-gray-300 rounded text-sm">
             ANNIVERSARY
@@ -116,6 +145,42 @@ export default function App() {
                       {' '}or{' '}
                       <a href="mailto:Hello@Jandelltd.com" className="text-purple-700 hover:underline">Hello@Jandelltd.com</a>
                     </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm">Date</p>
+                    <p className="text-sm text-gray-600">Friday, 5th June 2026</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm">Time</p>
+                    <p className="text-sm text-gray-600">4:00 PM</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm">Dress Code</p>
+                    <p className="text-sm text-gray-600">Business Casual/Traditional Wear</p>
                   </div>
                 </div>
               </div>
