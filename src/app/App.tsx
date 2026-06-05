@@ -23,6 +23,7 @@ export default function App() {
     seconds: 0
   });
   const bannerImage = bannerImageImport;
+  const [isExpired, setIsExpired] = useState(false);
 
   useEffect(() => {
     const calculateCountdown = () => {
@@ -31,6 +32,7 @@ export default function App() {
       const difference = eventDate - now;
 
       if (difference > 0) {
+        setIsExpired(false);
         setCountdown({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
           hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
@@ -38,6 +40,7 @@ export default function App() {
           seconds: Math.floor((difference / 1000) % 60)
         });
       } else {
+        setIsExpired(true);
         setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     };
@@ -89,8 +92,13 @@ export default function App() {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-purple-700 rounded-full"></div>
-            <span className="text-sm">RESPONSE IN {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s</span>
+            <div className={`w-2 h-2 ${isExpired ? 'bg-red-500' : 'bg-purple-700'} rounded-full`}></div>
+            <span className="text-sm">
+              {isExpired
+                ? 'RSVP CLOSED'
+                : `RESPONSE IN ${countdown.days}d ${countdown.hours}h ${countdown.minutes}m ${countdown.seconds}s`
+              }
+            </span>
           </div>
           <div className="px-4 py-1 border border-gray-300 rounded text-sm">
             ANNIVERSARY
@@ -119,75 +127,93 @@ export default function App() {
                 Celebrating 30 years of vision and dedication. The Launch marks a significant milestone in our journey, honoring the commitment and partnership that have brought us here. Join us for an evening of celebration with team, partners, and stakeholders.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-amber-400 rounded flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                    </svg>
+              {!isExpired && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-amber-400 rounded flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-bold text-sm">Venue</p>
+                      <p className="text-sm text-gray-600">Mövenpick Ambassador Hotel Accra</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-sm">Venue</p>
-                    <p className="text-sm text-gray-600">Mövenpick Ambassador Hotel Accra</p>
-                  </div>
-                </div>
 
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-purple-700 rounded flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-                    </svg>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-purple-700 rounded flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-bold text-sm">Contact</p>
+                      <p className="text-sm text-gray-600">
+                        <a href="tel:+233551778933" className="text-purple-700 hover:underline">+233 55 177 8933</a>
+                        {' '}or{' '}
+                        <a href="mailto:Hello@Jandelltd.com" className="text-purple-700 hover:underline">Hello@Jandelltd.com</a>
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-sm">Contact</p>
-                    <p className="text-sm text-gray-600">
-                      <a href="tel:+233551778933" className="text-purple-700 hover:underline">+233 55 177 8933</a>
-                      {' '}or{' '}
-                      <a href="mailto:Hello@Jandelltd.com" className="text-purple-700 hover:underline">Hello@Jandelltd.com</a>
-                    </p>
-                  </div>
-                </div>
 
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/>
-                    </svg>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-bold text-sm">Date</p>
+                      <p className="text-sm text-gray-600">Friday, 5th June 2026</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-sm">Date</p>
-                    <p className="text-sm text-gray-600">Friday, 5th June 2026</p>
-                  </div>
-                </div>
 
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-                    </svg>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-bold text-sm">Time</p>
+                      <p className="text-sm text-gray-600">4:00 PM</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-sm">Time</p>
-                    <p className="text-sm text-gray-600">4:00 PM</p>
-                  </div>
-                </div>
 
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-bold text-sm">Dress Code</p>
-                    <p className="text-sm text-gray-600">Business Casual/Traditional Wear</p>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-bold text-sm">Dress Code</p>
+                      <p className="text-sm text-gray-600">Business Casual/Traditional Wear</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
-            {/* Show form or button */}
-            {!showForm && !submitted && (
+            {/* RSVP Closed State */}
+            {isExpired && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Lock size={24} className="text-white" />
+                </div>
+                <h4 className="font-bold text-lg mb-2 text-red-700">RSVP Closed</h4>
+                <p className="text-sm text-gray-600">
+                  For more info, kindly contact:{' '}
+                  <a href="tel:+233551778933" className="text-purple-700 hover:underline font-medium">+233 55 177 8933</a>
+                  {' '}or{' '}
+                  <a href="mailto:Hello@Jandelltd.com" className="text-purple-700 hover:underline font-medium">Hello@Jandelltd.com</a>
+                </p>
+              </div>
+            )}
+
+            {/* Show form or button (only when not expired) */}
+            {!isExpired && !showForm && !submitted && (
               <button
                 onClick={() => setShowForm(true)}
                 className="flex items-center gap-2 text-sm font-bold hover:underline cursor-pointer"
@@ -198,7 +224,7 @@ export default function App() {
             )}
 
             {/* RSVP Form */}
-            {showForm && !submitted && (
+            {!isExpired && showForm && !submitted && (
               <>
                 <hr className="border-gray-200" />
                 <form onSubmit={handleSubmit}>
@@ -297,7 +323,7 @@ export default function App() {
               </>
             )}
 
-            {submitted && (
+            {!isExpired && submitted && (
               <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
                 <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
